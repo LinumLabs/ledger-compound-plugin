@@ -24,8 +24,8 @@ const Resolve = require('path').resolve;
 const APP_PATH_NANOS = Resolve('elfs/ethereum_nanos.elf');
 const APP_PATH_NANOX = Resolve('elfs/ethereum_nanox.elf');
 
-const PLUGIN_LIB_NANOS = { '1inch': Resolve('elfs/compound_nanos.elf') };
-const PLUGIN_LIB_NANOX = { '1inch': Resolve('elfs/compound_nanos.elf') };
+const PLUGIN_LIB_NANOS = { 'compound': Resolve('elfs/compound_nanos.elf') };
+const PLUGIN_LIB_NANOX = { 'compound': Resolve('elfs/compound_nanos.elf') };
 
 const RANDOM_ADDRESS = "0xaaaabbbbccccddddeeeeffffgggghhhhiiiijjjj";
 
