@@ -1,52 +1,64 @@
 import "core-js/stable";
 import "regenerator-runtime/runtime";
-import { txFromEtherscan, zemu, transactionUploadDelay} from './test.fixture';
+import { waitForAppScreen, zemu, genericTx, SPECULOS_ADDRESS} from './test.fixture';
+import { ethers } from "ethers";
+import { parseEther, parseUnits} from "ethers/lib/utils";
 
-// EDIT THIS: Replace with your contract address
 const contractAddr = "0x70e36f6bf80a52b3b46b3af8e106cc0ed743e8e4";
-// EDIT THIS: Replace `boilerplate` with your plugin name
-const abi_path = '../compound/abis/' + contractAddr + '.json';
-const rawTxHex = "0xf88a819985066d169400830733d49470e36f6bf80a52b3b46b3af8e106cc0ed743e8e480a4852a12e300000000000000000000000000000000000000000000001b1ae4d6e2ef50000026a0d277740760308a1378221d77fe193c9c4e99e0cfb080b8296fde120437ba120ba03dfe161ad5f6eb65ff024d6f3f4b874a4b4ff37614d3dec307126fe45981f9f1";
-const testLabel = "redeem_underlying";
-const testNetwork = "ethereum";
-const signed = false;
-const contractName = "Compound"
-const devices = [
-  {
-    name: "nanos",
-    label: "nano S",
-    steps: 6
-  }
-];
+const abi_path = '..compound/abis/' + contractAddr + '.json';
+const abi = require(abi_path);
+
 // Reference transaction for this test:
-// https://etherscan.io/tx/0x08d3407543117eb4531cc1721689a5792b30fb3d2b228968ef449f958ba9eaca
+// https://etherscan.io/tx/0xa8df5b92ec38780f52bde630f7f2e89293f3d7d2ddd99d262b89dbf68a4132a1
 
-const processTransaction = async (eth, sim, steps, label, rawTxHex) => {
+// Nanos S test
+test('[Nano S] Swap Exact Eth For Tokens with beneficiary', zemu("nanos", async (sim, eth) => {
+  // Constants used to create the transaction
+  const amount = parseUnits("28471151959593036279", 'wei');
 
-  const serializedTx = txFromEtherscan(rawTxHex);
+  const contract = new ethers.Contract(contractAddr, abi);
 
-  let tx = eth.signTransaction("44'/60'/0'/0/0", serializedTx);
+  // signature: mint(uint256 amount )
+  const {data} = await contract.populateTransaction.redeemUnderlying(amount);
 
-  await sim.waitUntilScreenIsNot(
-    sim.getMainMenuSnapshot(),
-    transactionUploadDelay
+  // Get the generic transaction template
+  let unsignedTx = genericTx;
+  // Modify `to` to make it interact with the contract
+  unsignedTx.to = contractAddr;
+  // Modify the attached data
+  unsignedTx.data = data;
+
+  // Create serializedTx and remove the "0x" prefix
+  const serializedTx = ethers.utils.serializeTransaction(unsignedTx).slice(2);
+
+  const tx = eth.signTransaction(
+    "44'/60'/0'/0",
+    serializedTx
   );
-  await sim.navigateAndCompareSnapshots(".", label, [steps, 0]);
+
+  // Wait for the application to actually load and parse the transaction
+  await waitForAppScreen(sim);
+  // Navigate the display by pressing the right button 7 times, then pressing both buttons to accept the transaction.
+  await sim.navigateAndCompareSnapshots('.', 'nanos_swap_exact_eth_for_tokens_with_beneficiary', [10, 0]);
 
   await tx;
-}
+}));
 
-devices.forEach(async (device) =>
-  test(
-    "[" + contractName + "] - " + device.label + " - " + testLabel,
-    zemu(device.name, async (sim, eth) => {
-      await processTransaction(
-        eth,
-        sim,
-        device.steps,
-        testLabel,
-        rawTxHex
-      );
-    },signed, testNetwork)
-  )
-);
+// NanoX test
+test('[Nano X] Swap Exact Eth For Tokens with beneficiary', zemu("nanox", async (sim, eth) => {
+
+  // Rather than constructing the tx ourselves, one can can obtain it directly through etherscan (with a little bit of editing)
+  const serializedTx = "02f901170181d38459682f0085215d7c1e598302a4e9947a250d5630b4cf539739df2c5dacb4c659f2488d88016345785d8a0000b8e47ff36ab50000000000000000000000000000000000000000000000018b1dd9dc51b5a9f7000000000000000000000000000000000000000000000000000000000000008000000000000000000000000015557c8b7246c38ee71ea6dc69e4347f5dac210400000000000000000000000000000000000000000000000000000000615336100000000000000000000000000000000000000000000000000000000000000002000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc20000000000000000000000006b3595068778dd592e39a122f4f5a5cf09c90fe2c0";
+
+  const tx = eth.signTransaction(
+    "44'/60'/0'/0",
+    serializedTx,
+  );
+
+  // Wait for the application to actually load and parse the transaction
+  await waitForAppScreen(sim);
+  // Navigate the display by pressing the right button 7 times, then pressing both buttons to accept the transaction.
+  await sim.navigateAndCompareSnapshots('.', 'nanox_swap_exact_eth_for_tokens_with_beneficiary', [6, 0]);
+
+  await tx;
+}));

@@ -6,7 +6,7 @@ import { expect } from "../jest";
 
 const {NANOS_ETH_ELF_PATH, NANOX_ETH_ELF_PATH, NANOS_COMPOUND_LIB, NANOX_COMPOUND_LIB, sim_options_nanos, sim_options_nanox, TIMEOUT, getTmpPath} = require("generic.js");
 
-const ORIGINAL_SNAPSHOT_PATH_PREFIX = "snapshots/repay_borrow_on_behalf/";
+const ORIGINAL_SNAPSHOT_PATH_PREFIX = "snapshots/repay/";
 
 const ORIGINAL_SNAPSHOT_PATH_NANOS = ORIGINAL_SNAPSHOT_PATH_PREFIX + "nanos/";
 const ORIGINAL_SNAPSHOT_PATH_NANOX = ORIGINAL_SNAPSHOT_PATH_PREFIX + "nanox/";
@@ -43,13 +43,6 @@ test("repay nanos", async () => {
     const compound = Zemu.LoadPng2RGB(tmpPath + filename);
     const expected_compound = Zemu.LoadPng2RGB(ORIGINAL_SNAPSHOT_PATH_NANOS + filename);
     expect(compound).toMatchSnapshot(expected_compound);
-
-    // borrower
-    filename = "borrower.png";
-    await sim.clickRight(tmpPath + filename);
-    const borrower = Zemu.LoadPng2RGB(tmpPath + filename);
-    const expected_borrower = Zemu.LoadPng2RGB(ORIGINAL_SNAPSHOT_PATH_NANOS + filename);
-    expect(borrower).toMatchSnapshot(expected_borrower);
 
     // repay
     filename = "repay.png";
@@ -119,12 +112,6 @@ test("repay nanox", async () => {
     const expected_lido = Zemu.LoadPng2RGB(ORIGINAL_SNAPSHOT_PATH_NANOX + filename);
     expect(lido).toMatchSnapshot(expected_lido);
 
-    // borrower
-    filename = "borrower.png";
-    await sim.clickRight(tmpPath + filename);
-    const borrower = Zemu.LoadPng2RGB(tmpPath + filename);
-    const expected_borrower = Zemu.LoadPng2RGB(ORIGINAL_SNAPSHOT_PATH_NANOS + filename);
-    expect(borrower).toMatchSnapshot(expected_borrower);
     // repay
     filename = "repay.png";
     await sim.clickRight(tmpPath + filename);
