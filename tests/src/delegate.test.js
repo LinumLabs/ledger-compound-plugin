@@ -41,7 +41,7 @@ devices.forEach(async (device) =>
   test(
     // "[" + contractName + "] - " + device.label + " - " + testLabel,
     "test",
-    ()=> {return Promise(true)}
+    async ()=> {return await true}
     // zemu(device.name, async (sim, eth) => {
     //   await processTransaction(
     //     eth,
