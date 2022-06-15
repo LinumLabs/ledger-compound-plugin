@@ -23,7 +23,7 @@ function assert(condition, message) {
 function generate_plugin_config(testNetwork) {
 
 	var fs = require('fs');
-	var files = fs.readdirSync(`../${pluginFolder}/abis/`);
+	var files = fs.readdirSync(`${pluginFolder}/abis/`);
 
 	// `contracts_to_abis` holds a maping of contract addresses to abis
 	let contracts_to_abis = {};
