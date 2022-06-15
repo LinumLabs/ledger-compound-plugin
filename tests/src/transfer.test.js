@@ -1,4 +1,4 @@
-import { processTest, populateTransaction } from "../test.fixture";
+import { processTest, populateTransaction } from "./test.fixture";
 
 // Reference transaction for this test:
 // https://etherscan.io/tx/0xa26b900bd6de31f61e673c4f424f952bf9b0e94ece49b09dd5e8dccb198478af
