@@ -1,10 +1,11 @@
 import "core-js/stable";
 import "regenerator-runtime/runtime";
-import { waitForAppScreen, zemu, txFromEtherscan, transactionUploadDelay} from './test.fixture';
-import { processTest } from "../../test.fixture";
+import { processTest,populateTransaction } from "./test.fixture";
 
 
 
+// Reference transaction for this test:
+// https://etherscan.io/tx/0xa26b900bd6de31f61e673c4f424f952bf9b0e94ece49b09dd5e8dccb198478af
 
 // EDIT THIS: Replace with your contract address
 const contractAddr = "0x70e36f6bf80a52b3b46b3af8e106cc0ed743e8e4";
@@ -15,7 +16,8 @@ const rawTxHex = "0x02f8b1013e84773594008504a817c8008305152e9470e36f6bf80a52b3b4
 const testNetwork = "ethereum";
 const testDirSuffix = "transfer"; // <= directory to compare device snapshots to
 const signedPlugin = false;
-const contractName = "Compound"
+const contractName = "Compound";
+const serializedTx = populateTransaction(contractAddr, rawTxHex, chainID);
 const devices = [
   {
     name: "nanos",
@@ -23,41 +25,7 @@ const devices = [
     steps: 6
   }
 ];
-// Reference transaction for this test:
-// https://etherscan.io/tx/0xa26b900bd6de31f61e673c4f424f952bf9b0e94ece49b09dd5e8dccb198478af
-
-// const processTransaction = async (eth, sim, steps, label, rawTxHex) => {
-
-//   const serializedTx = txFromEtherscan(rawTxHex);
-
-//   let tx = eth.signTransaction("44'/60'/0'/0/0", serializedTx);
-
-//   await sim.waitUntilScreenIsNot(
-//     sim.getMainMenuSnapshot(),
-//     transactionUploadDelay
-//   );
-//   await sim.navigateAndCompareSnapshots(".", label, [steps, 0]);
-
-//   await tx;
-// }
-// devices.forEach(async (device) => 
-//   test(
-//     "[" + contractName + "] - " + device.label + " - " + testLabel,
-//     zemu(device.name, async (sim, eth) => {
-//       await processTransaction(
-//         eth,
-//         sim,
-//         device.steps,
-//         testLabel,
-//         rawTxHex
-//       );
-//     },signed, testNetwork)
-//   )
-// );
-
-
-
 
 devices.forEach((device) =>
-  processTest(device, contractName, testLabel, testDirSuffix, rawTxHex, signedPlugin,"",testNetwork)
+  processTest(device, contractName, testLabel, testDirSuffix, "", signedPlugin,serializedTx,testNetwork)
 );
