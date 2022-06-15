@@ -104,12 +104,11 @@ function zemu(device, func, signed = false, testNetwork="ethereum") {
       const transport = await sim.getTransport();
       const eth = new Eth(transport);
 
-      if(!signed){
         eth.setLoadConfig({
           baseURL: null,
           extraPlugins: generate_plugin_config(),
         });
-      }
+    
       await func(sim, eth);
     } finally {
       await sim.close();
