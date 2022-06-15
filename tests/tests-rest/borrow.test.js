@@ -1,13 +1,13 @@
 import "core-js/stable";
 import "regenerator-runtime/runtime";
-import { txFromEtherscan, zemu, transactionUploadDelay} from './test.fixture';
+import { txFromEtherscan, zemu, transactionUploadDelay} from '../src/test.fixture';
 
 // EDIT THIS: Replace with your contract address
 const contractAddr = "0x70e36f6bf80a52b3b46b3af8e106cc0ed743e8e4";
 // EDIT THIS: Replace `boilerplate` with your plugin name
 const abi_path = '../compound/abis/' + contractAddr + '.json';
-const rawTxHex = "0x02f892018202f1843b9aca00850a5dce1bba830426949470e36f6bf80a52b3b46b3af8e106cc0ed743e8e480a4a0712d68000000000000000000000000000000000000000000000002718291b0154533abc080a06ea774b9c0ba48ec92107955d01487e65cae5ce74505fafe17d38fcb12c4de52a0784495c38a539c9c584dee59ad2a012186c9e8977c85f9cc78ef7f6ca5c54c24";
-const testLabel = "liquidate_borrow";
+const rawTxHex = "0x02f89001248440207e0785072d303d41830586249470e36f6bf80a52b3b46b3af8e106cc0ed743e8e480a4c5ebeaec00000000000000000000000000000000000000000000000161e232e52c760000c080a05caafea5cd1bde52232fb2703111af375943420bc2471feeb3c7c773427577d6a028dc272346cdde78da0916fb92464cfe65ddf0910c409c067fb7fd0a5983c6b3";
+const testLabel = "borrow";
 const testNetwork = "ethereum";
 const signed = false;
 const contractName = "Compound"
@@ -19,10 +19,12 @@ const devices = [
   }
 ];
 // Reference transaction for this test:
-// https://etherscan.io/tx/0x0160b3aec12fd08e6be0040616c7c38248efb4413168a3372fc4d2db0e5961bb
+// https://etherscan.io/tx/0x05a71f11675faa1e43aaeb228d8068d7c851f940f5726c7958dea57a07e1b2bc
 
 const processTransaction = async (eth, sim, steps, label, rawTxHex) => {
+
   const serializedTx = txFromEtherscan(rawTxHex);
+  
   let tx = eth.signTransaction("44'/60'/0'/0/0", serializedTx);
 
   await sim.waitUntilScreenIsNot(
@@ -34,17 +36,16 @@ const processTransaction = async (eth, sim, steps, label, rawTxHex) => {
   await tx;
 }
 
-devices.forEach(async (device) =>    
-  test(
-    "[" + contractName + "] - " + device.label + " - " + testLabel,
-    zemu(device.name, async (sim, eth) => {
-      await processTransaction(
-        eth,
-        sim,
-        device.steps,
-        testLabel,
-        rawTxHex
-      );
-    },signed, testNetwork)
+devices.forEach(async (device) =>  test(
+  "[" + contractName + "] - " + device.label + " - " + testLabel,
+  zemu(device.name, async (sim, eth) => {
+    await processTransaction(
+      eth,
+      sim,
+      device.steps,
+      testLabel,
+      rawTxHex
+    );
+  },signed, testNetwork)
   )
 );
