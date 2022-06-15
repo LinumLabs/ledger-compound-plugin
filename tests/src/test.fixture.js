@@ -11,6 +11,7 @@ const sim_options_generic = {
   logging: true,
   X11: true,
   startDelay: 5000,
+  startText: 'is ready',
   custom: "",
 };
 
@@ -77,7 +78,7 @@ function txFromEtherscan(rawTx) {
  * Emulation of the device using zemu
  * @param {string} device name of the device to emulate (nanos, nanox)
  * @param {function} func
- * @param {boolean} signed the plugin is already signed 
+ * @param {boolean} signed the plugin is already signed
  * @returns {Promise}
  */
 function zemu(device, func, signed = false, testNetwork="ethereum") {
@@ -104,16 +105,70 @@ function zemu(device, func, signed = false, testNetwork="ethereum") {
       const transport = await sim.getTransport();
       const eth = new Eth(transport);
 
-        eth.setLoadConfig({
+      if(!signed){
+        eth.setPluginsLoadConfig({
           baseURL: null,
-          extraPlugins: generate_plugin_config(),
+          extraPlugins: generate_plugin_config(testNetwork),
         });
-    
+      }
       await func(sim, eth);
     } finally {
       await sim.close();
     }
   };
+}
+
+/**
+ * Process the trasaction through the full test process in interaction with the simulator
+ * @param {Eth} eth Device to test (nanos, nanox)
+ * @param {function} sim Zemu simulator
+ * @param {int} steps Number of steps to push right button
+ * @param {string} label directory against which the test snapshots must be checked.
+ * @param {string} rawTxHex RawTransaction Hex to process
+ */
+async function processTransaction(eth, sim, steps, label, rawTxHex,srlTx="") {
+
+  let serializedTx;
+
+  if(srlTx == "")
+    serializedTx = txFromEtherscan(rawTxHex);
+  else
+    serializedTx = srlTx;
+
+  let tx = eth.signTransaction("44'/60'/0'/0/0", serializedTx);
+
+  await sim.waitUntilScreenIsNot(
+    sim.getMainMenuSnapshot(),
+    transactionUploadDelay
+  );
+  await sim.navigateAndCompareSnapshots(".", label, [steps, 0]);
+
+  await tx;
+}
+
+/**
+ * Function to execute test with the simulator
+ * @param {Object} device Device including its name, its label, and the number of steps to process the use case
+ * @param {string} contractName Name of the contract
+ * @param {string} testLabel Name of the test case
+ * @param {string} testDirSuffix Name of the folder suffix for snapshot comparison
+ * @param {string} rawTxHex RawTx Hex to test
+ * @param {boolean} signed The plugin is already signed and existing in Ledger database
+ */
+function processTest(device, contractName, testLabel, testDirSuffix, rawTxHex, signed, serializedTx, testNetwork="ethereum" ) {
+  test(
+    "[" + contractName + "] - " + device.label + " - " + testLabel,
+    zemu(device.name, async (sim, eth) => {
+      await processTransaction(
+        eth,
+        sim,
+        device.steps,
+        testNetwork+ "_" + device.name + "_" + testDirSuffix,
+        rawTxHex,
+        serializedTx
+      );
+    },signed, testNetwork)
+  );
 }
 
 
@@ -134,9 +189,7 @@ function populateTransaction(contractAddr, inputData, chainId, value="0.1"){
 
 
 module.exports = {
+  processTest,
   genericTx,
-  populateTransaction,
-  zemu,
-  txFromEtherscan,
-  transactionUploadDelay
+  populateTransaction
 };
