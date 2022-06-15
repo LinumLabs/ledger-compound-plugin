@@ -17,7 +17,7 @@ const testNetwork = "ethereum";
 const testDirSuffix = "transfer"; // <= directory to compare device snapshots to
 const signedPlugin = false;
 const contractName = "Compound";
-const serializedTx = populateTransaction(contractAddr, rawTxHex, chainID);
+const serializedTx = populateTransaction(contractAddr, rawTxHex, 1);
 const devices = [
   {
     name: "nanos",
