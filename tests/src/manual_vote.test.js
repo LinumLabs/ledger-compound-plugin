@@ -1,6 +1,4 @@
-import "core-js/stable";
-import "regenerator-runtime/runtime";
-import { txFromEtherscan, zemu, transactionUploadDelay} from './test.fixture';
+import { processTest, populateTransaction } from "./test.fixture";
 
 // EDIT THIS: Replace with your contract address
 const contractAddr = "0xc0da01a04c3f3e0be433606045bb7017a7323e38";
