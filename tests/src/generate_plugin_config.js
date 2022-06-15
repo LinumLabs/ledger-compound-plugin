@@ -33,7 +33,7 @@ function generate_plugin_config(testNetwork) {
 		// Strip ".json" suffix
 		let contractAddress = abiFileName.slice(0, abiFileName.length - ".abi.json".length);
 		// Load abi
-		let abi = require(`../networks/${testNetwork}/${pluginFolder}/abis/${abiFileName}`);
+		let abi = require(`networks/${testNetwork}/${pluginFolder}/abis/${abiFileName}`);
 		// Add it to contracts
 		contracts_to_abis[contractAddress] = abi;
 	}
