@@ -40,7 +40,7 @@ void set_address_ui(ethQueryContractUI_t *msg, context_t *context) {
 }
 
 // Set UI for First param screen
-static void set_first_param_ui(ethQueryContractUI_t *msg, context_t *context) {
+void set_first_param_ui(ethQueryContractUI_t *msg, context_t *context) {
     switch (context->selectorIndex) {
         case COMPOUND_MINT:
             strlcpy(msg->title, "Mint.", msg->titleLength);
@@ -115,7 +115,7 @@ static void set_first_param_ui(ethQueryContractUI_t *msg, context_t *context) {
     }
 }
 
-static void set_second_param_ui(ethQueryContractUI_t *msg, context_t *context) {
+void set_second_param_ui(ethQueryContractUI_t *msg, context_t *context) {
     switch (context->selectorIndex) {
         case COMPOUND_REPAY_BORROW_ON_BEHALF:
             strlcpy(msg->title, "Repaying amount.", msg->titleLength);
@@ -156,7 +156,7 @@ static void set_second_param_ui(ethQueryContractUI_t *msg, context_t *context) {
     }
 }
 
-static void set_third_param_ui(ethQueryContractUI_t *msg, context_t *context) {
+void set_third_param_ui(ethQueryContractUI_t *msg, context_t *context) {
     switch (context->selectorIndex) {
         case COMPOUND_LIQUIDATE_BORROW:
             strlcpy(msg->title, "Collateral.", msg->titleLength);
