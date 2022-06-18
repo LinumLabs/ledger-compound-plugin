@@ -28,17 +28,16 @@ uint8_t get_underlying_asset_decimals(char compound_ticker, uint8_t *out_decimal
 }
 
 void handle_provide_token(void *parameters) {
-    ethPluginProvideInfo_t *msg = (ethPluginProvideInfo_t *) parameters;
+    ethPluginProvideToken_t *msg = (ethPluginProvideToken_t *) parameters;
     context_t *context = (context_t *) msg->pluginContext;
 
     if (msg->item1) {
         // Store its ticker.
-        context->decimals =
-            get_underlying_asset_decimals(msg->item1->token.ticker, &context->decimals);
-        strlcpy(context->ticker, (char *) msg->item1->token.ticker, sizeof(context->ticker));
+        context->decimals = get_underlying_asset_decimals(msg->token1->ticker, &context->decimals);
+        strlcpy(context->ticker, (char *) msg->token1->ticker, sizeof(context->ticker));
         context->token_found = true;
     }
-    if (!msg->item1 || !context->token_found) {
+    if (!msg->token1 || !context->token_found) {
         // The Ethereum App did not manage to find the info for the requested token.
         context->token_found = false;
 
