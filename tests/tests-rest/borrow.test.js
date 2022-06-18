@@ -1,6 +1,6 @@
 import "core-js/stable";
 import "regenerator-runtime/runtime";
-import { waitForAppScreen, zemu,nano_models} from './test.fixture';
+import { waitForAppScreen, zemu,nano_models} from '../src/test.fixture';
 
 // EDIT THIS: Replace with your contract address
 const contractAddr = "0x70e36f6bf80a52b3b46b3af8e106cc0ed743e8e4";
