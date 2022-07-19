@@ -1,17 +1,15 @@
-import Zemu from "@zondax/zemu";
-import fsExtra from "fs-extra";
+import Zemu from '@zondax/zemu';
 
 const catchExit = async () => {
-  process.on("SIGINT", () => {
-    Zemu.stopAllEmuContainers(function () {
-      process.exit();
+    process.on('SIGINT', () => {
+        Zemu.stopAllEmuContainers(() => {
+            process.exit();
+        });
     });
-  });
 };
 
 module.exports = async () => {
-  await catchExit();
-  await Zemu.checkAndPullImage();
-  await Zemu.stopAllEmuContainers();
-  fsExtra.emptyDirSync("snapshots/tmp")
+    await catchExit();
+    await Zemu.checkAndPullImage();
+    await Zemu.stopAllEmuContainers();
 };

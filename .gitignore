@@ -5,6 +5,8 @@ bin/
 debug/
 dep/
 obj/
+src-old/glyphs.c
+src-old/glyphs.h
 
 # Editors
 .idea/
@@ -21,4 +23,4 @@ __pycache__/
 # JS
 tests/node_modules
 tests/lib
-tests/elfs
+tests/snapshots-tmp
