@@ -11,14 +11,14 @@ void handle_query_contract_id(void *parameters) {
     strlcpy(msg->name, "Compound", msg->nameLength);
 
     switch (context->selectorIndex) {
-        case COMPOUND_REDEEM_UNDERLYING:
-            strlcpy(msg->version, "Redeem underlying", msg->versionLength);
+        case COMPOUND_MINT:
+            strlcpy(msg->version, "Mint", msg->versionLength);
             break;
         case COMPOUND_REDEEM:
             strlcpy(msg->version, "Redeem", msg->versionLength);
             break;
-        case COMPOUND_MINT:
-            strlcpy(msg->version, "Mint", msg->versionLength);
+        case COMPOUND_REDEEM_UNDERLYING:
+            strlcpy(msg->version, "Redeem underlying", msg->versionLength);
             break;
         case COMPOUND_BORROW:
             strlcpy(msg->version, "Borrow", msg->versionLength);

@@ -48,9 +48,9 @@ static const uint8_t COMPOUND_MANUAL_VOTE_SELECTOR[SELECTOR_SIZE] = {0x15, 0x37,
 // Array of all the different boilerplate selectors. Make sure this follows the same order as
 // the enum defined in `compound_plugin.h` EDIT THIS: Use the names of the array declared above.
 const uint8_t *const COMPOUND_SELECTORS[NUM_SELECTORS] = {
-    COMPOUND_REDEEM_UNDERLYING_SELECTOR,
-    COMPOUND_REDEEM_SELECTOR,
     COMPOUND_MINT_SELECTOR,
+    COMPOUND_REDEEM_SELECTOR,
+    COMPOUND_REDEEM_UNDERLYING_SELECTOR,
     COMPOUND_BORROW_SELECTOR,
     COMPOUND_REPAY_BORROW_SELECTOR,
     COMPOUND_REPAY_BORROW_ON_BEHALF_SELECTOR,

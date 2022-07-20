@@ -143,7 +143,7 @@ async function processTransaction(eth, sim, steps, label, rawTxHex, srlTx = "") 
     }, {
       nft: false,
       externalPlugins: true,
-      erc20: false,
+      erc20: true,
     })
     .catch((e) => {
       console.warn(
