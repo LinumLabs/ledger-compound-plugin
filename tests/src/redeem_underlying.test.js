@@ -4,15 +4,15 @@ import { processTest, populateTransaction } from "./test.fixture";
 const contractAddr = "0x70e36f6bf80a52b3b46b3af8e106cc0ed743e8e4";
 // EDIT THIS: Replace `boilerplate` with your plugin name
 const abi_path = '../compound/abis/' + contractAddr + '.json';
-const rawTxHex = "0xf88a819985066d169400830733d49470e36f6bf80a52b3b46b3af8e106cc0ed743e8e480a4852a12e300000000000000000000000000000000000000000000001b1ae4d6e2ef50000026a0d277740760308a1378221d77fe193c9c4e99e0cfb080b8296fde120437ba120ba03dfe161ad5f6eb65ff024d6f3f4b874a4b4ff37614d3dec307126fe45981f9f1";
+const rawTxHex = "0x02f892018201b784773594008507a56103b88304e9e49470e36f6bf80a52b3b46b3af8e106cc0ed743e8e480a4852a12e30000000000000000000000000000000000000000000000056bc75e2d63100000c001a08800fa6c988479a08b91b4466aab86b5384e9d4e83ece9de05e4826a0e89f0bea07c0488a3da0c981942bdf1637a9b95f9d6acf39e84195413e5093e6b22c70b26";
 
 // Reference transaction for this test:
-// https://etherscan.io/tx/0x08d3407543117eb4531cc1721689a5792b30fb3d2b228968ef449f958ba9eaca
+// https://etherscan.io/tx/0x4e5e24992a26d3e9f7e0370e6d6d294f7ec5854c60bd9073ad9e9272ed11b494
 const testLabel = "redeem underlying" // <= Name of the test
 const testNetwork = "ethereum";
 const testDirSuffix = "redeem_underlying"; // <= directory to compare device snapshots to
 const signedPlugin = true;
-const contractName = "Compound";
+const contractName = "cCOMP";
 const chainID = 1;
 
 const serializedTx = populateTransaction(contractAddr, rawTxHex, chainID);

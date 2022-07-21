@@ -112,6 +112,15 @@ void set_first_param_ui(ethQueryContractUI_t *msg, context_t *context) {
             strlcpy(msg->title, "Delegatee.", msg->titleLength);
             set_address_ui(msg, context);
             break;
+        case CETH_MINT:
+            strlcpy(msg->title, "Mint cETH", msg->titleLength);
+            amountToString(context->amount,
+                           sizeof(context->amount),
+                           context->decimals,
+                           context->ticker,
+                           msg->msg,
+                           msg->msgLength);
+            break;
     }
 }
 

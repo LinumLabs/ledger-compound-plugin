@@ -72,6 +72,8 @@ void handle_init_contract(void *parameters) {
         case COMPOUND_VOTE_DELEGATE:
             context->next_param = DELEGATEE;
             break;
+        case CETH_MINT:
+            context->next_param = CETH_AMOUNT;
         default:
             PRINTF("Missing selectorIndex: %d\n", context->selectorIndex);
             msg->result = ETH_PLUGIN_RESULT_ERROR;

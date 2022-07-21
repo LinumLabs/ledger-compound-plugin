@@ -8,13 +8,13 @@ void handle_finalize(void *parameters) {
 
     // Setting number of screens based on function
     switch (context->selectorIndex) {
-        case COMPOUND_REDEEM_UNDERLYING:
+        case COMPOUND_MINT:
             msg->numScreens = 2;
             break;
         case COMPOUND_REDEEM:
             msg->numScreens = 2;
             break;
-        case COMPOUND_MINT:
+        case COMPOUND_REDEEM_UNDERLYING:
             msg->numScreens = 2;
             break;
         case COMPOUND_BORROW:
@@ -36,6 +36,9 @@ void handle_finalize(void *parameters) {
             msg->numScreens = 1;
             break;
         case COMPOUND_VOTE_DELEGATE:
+            msg->numScreens = 2;
+            break;
+        case CETH_MINT:
             msg->numScreens = 2;
             break;
         // Keep this

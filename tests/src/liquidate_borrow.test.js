@@ -11,7 +11,7 @@ const testLabel = "liquidate borrrow" // <= Name of the test
 const testNetwork = "ethereum";
 const testDirSuffix = "liquidate_borrow"; // <= directory to compare device snapshots to
 const signedPlugin = true;
-const contractName = "Compound";
+const contractName = "cCOMP";
 const chainID = 1;
 
 const serializedTx = populateTransaction(contractAddr, rawTxHex, chainID);

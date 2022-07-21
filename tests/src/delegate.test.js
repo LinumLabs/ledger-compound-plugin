@@ -4,15 +4,15 @@ import { processTest, populateTransaction } from "../src/test.fixture";
 const contractAddr = "0xc00e94cb662c3520282e6f5717214004a7f26888";
 
 // Reference transaction for this test:
-// https://etherscan.io/tx/0xc00e94cb662c3520282e6f5717214004a7f26888
-// The rawTx of the tx up above is accessible through: https://etherscan.io/getRawTx?tx=0xc00e94cb662c3520282e6f5717214004a7f26888
+// https://etherscan.io/tx/0xb327a0c3864e130d0cfd16b5e828882b381464b2329cdb08d097050c9f7fc6e5
+// The rawTx of the tx up above is accessible through: https://etherscan.io/getRawTx?tx=0xb327a0c3864e130d0cfd16b5e828882b381464b2329cdb08d097050c9f7fc6e5
 
-const rawTxHex = "0x02f893018201378503f5476a008503f5476a008301b59494c00e94cb662c3520282e6f5717214004a7f2688880a45c19a95c000000000000000000000000501783e585936116220b5028c4c22dc9fdb991bcc001a0b7550056af6f8bdd1ddb570b2eded0cb61ee7067edfcaf3111cf90c5cf5e1009a007427fb21c7bacb3f2edeed79827add2054441e6687d33bc38c59ef7633c409a";
+const rawTxHex = "0x02f89101068501bf08eb008501bf08eb008301b59494c00e94cb662c3520282e6f5717214004a7f2688880a45c19a95c000000000000000000000000b47e74e6fc3dd121b23cb0155d41dbf7de832ac5c001a0d15f04920ebfea7d68137669a2b5aaee5ac592b761f85048bdd5743e6b8a7f53a0154b06b93d2a5fcedc1ecc4d7214a54940eee418237bc07333aecd6a09b07033";
 const testLabel = "delegate" // <= Name of the test
 const testNetwork = "ethereum";
 const testDirSuffix = "delegate"; // <= directory to compare device snapshots to
 const signedPlugin = true;
-const contractName = "Compound";
+const contractName = "COMP";
 const chainID = 1;
 
 const serializedTx = populateTransaction(contractAddr, rawTxHex, chainID);

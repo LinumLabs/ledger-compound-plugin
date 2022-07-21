@@ -33,6 +33,10 @@ void handle_one_param_function(ethPluginProvideParameter_t *msg, context_t *cont
             copy_address(context->dest, sizeof(context->dest), msg->parameter);
             context->next_param = UNEXPECTED_PARAMETER;
             break;
+        case CETH_AMOUNT:
+            copy_parameter(context->amount, sizeof(context->amount), msg->parameter);
+            context->next_param = UNEXPECTED_PARAMETER;
+            break;
         // Keep this
         default:
             PRINTF("Param not supported: %d\n", context->next_param);

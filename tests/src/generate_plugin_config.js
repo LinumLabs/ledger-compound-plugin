@@ -31,7 +31,7 @@ function generate_plugin_config(testNetwork) {
 		assert(abiFileName.toLocaleLowerCase() == abiFileName, `FAILED: File ${abiFileName} should be lower case.`);
 
 		// Strip ".json" suffix
-		let contractAddress = abiFileName.slice(0, abiFileName.length - ".json".length);
+		let contractAddress = abiFileName.slice(0, abiFileName.length - ".abi.json".length);
 		// Load abi
 		let abi = require(`../${pluginFolder}/abis/${abiFileName}`);
 		// Add it to contracts
