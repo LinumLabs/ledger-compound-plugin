@@ -107,7 +107,7 @@ const uint8_t *const COMPOUND_SELECTORS[NUM_SELECTORS] = {COMPOUND_MINT_SELECTOR
 // Function to dispatch calls from the ethereum app.
 void dispatch_plugin_calls(int message, void *parameters) {
     switch (message) {
-     case ETH_PLUGIN_INIT_CONTRACT: {
+        case ETH_PLUGIN_INIT_CONTRACT: {
             ethPluginInitContract_t *msg = (ethPluginInitContract_t *) parameters;
             compound_parameters_t *context = (compound_parameters_t *) msg->pluginContext;
             size_t i;
