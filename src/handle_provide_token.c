@@ -45,6 +45,8 @@ void handle_provide_token(void *parameters) {
                 context->decimals = msg->item1->token.decimals;
                 msg->result = ETH_PLUGIN_RESULT_OK;
                 break;
+        
+        }
         strlcpy(context->ticker, (char *) msg->item1->token.ticker, sizeof(context->ticker));
         context->token_found = true;
     }
