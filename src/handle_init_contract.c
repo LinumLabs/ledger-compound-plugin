@@ -38,15 +38,6 @@ void handle_init_contract(void *parameters) {
         msg->result = ETH_PLUGIN_RESULT_UNAVAILABLE;
     }
 
-    // Set `next_param` to be the first field we expect to parse.
-    if (msg->dataSize != COMPOUND_EXPECTED_DATA_SIZE[context->selectorIndex]) {
-        PRINTF("Unexpected data size for command %d expected %d got %d\n",
-                context->selectorIndex,
-                COMPOUND_EXPECTED_DATA_SIZE[context->selectorIndex],
-                msg->dataSize);
-        msg->result = ETH_PLUGIN_RESULT_ERROR;
-        break;
-    }
     if (context->selectorIndex == CETH_MINT) {
         // ETH amount 0x1234 is stored 0x12340000...000 instead of 0x00....001234, so we
         // strip the following zeroes when copying
