@@ -12,7 +12,7 @@ void handle_query_contract_id(void *parameters) {
 
     switch (context->selectorIndex) {
         case COMPOUND_MINT:
-            strlcpy(msg->version, "Mint", msg->versionLength);
+            strlcpy(msg->version, "Lend", msg->versionLength);
             break;
         case COMPOUND_REDEEM:
             strlcpy(msg->version, "Redeem", msg->versionLength);
@@ -42,7 +42,7 @@ void handle_query_contract_id(void *parameters) {
             strlcpy(msg->version, "Vote delegate", msg->versionLength);
             break;
         case CETH_MINT:
-            strlcpy(msg->version, "Mint cETH", msg->versionLength);
+            strlcpy(msg->version, "Lend", msg->versionLength);
             break;
         // Keep this
         default:
@@ -50,5 +50,6 @@ void handle_query_contract_id(void *parameters) {
             msg->result = ETH_PLUGIN_RESULT_ERROR;
             return;
     }
+    strlcat(msg->version, " Assets", msg->versionLength);
     msg->result = ETH_PLUGIN_RESULT_OK;
 }

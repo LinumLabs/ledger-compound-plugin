@@ -193,16 +193,30 @@ void handle_query_contract_ui(void *parameters) {
     msg->result = ETH_PLUGIN_RESULT_OK;
 
     switch (msg->screenIndex) {
-        case 0:
-            set_first_param_ui(msg, context);
-            break;
+        case 0:{
+            strlcpy(msg->title, "Amount", msg->titleLength);
+            char *ticker_ptr = context->ticker_1;
+            /* skip "c" in front of cToken unless we use "redeem", as
+            redeem is the only operation dealing with a cToken amount */
+            if (context->selectorIndex != COMPOUND_REDEEM) {
+                ticker_ptr++;
+            }
+            amountToString(context->amount,
+                            sizeof(context->amount),
+                            context->decimals,
+                            ticker_ptr,
+                            msg->msg,
+                            100);
+            msg->result = ETH_PLUGIN_RESULT_OK;
+        } break;
         case 1:
-            set_second_param_ui(msg, context);
+            strlcpy(msg->title, "Contract", msg->titleLength);
+            strlcpy(msg->msg, "Compound ", msg->msgLength);
+            strlcat(msg->msg,
+                    context->ticker_1 + 1,
+                    msg->msgLength);  // remove the 'c' char at beginning of compound ticker
+            msg->result = ETH_PLUGIN_RESULT_OK;
             break;
-        case 2:
-            set_third_param_ui(msg, context);
-            break;
-        // Keep this
         default:
             PRINTF("Received an invalid screenIndex\n");
             msg->result = ETH_PLUGIN_RESULT_ERROR;
