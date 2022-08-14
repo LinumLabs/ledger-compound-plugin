@@ -187,10 +187,9 @@ void handle_query_contract_ui(void *parameters) {
     ethQueryContractUI_t *msg = (ethQueryContractUI_t *) parameters;
     context_t *context = (context_t *) msg->pluginContext;
 
-    // memset(msg->title, 0, msg->titleLength);
-    // memset(msg->msg, 0, 100);
-
-    // msg->result = ETH_PLUGIN_RESULT_OK;
+    memset(msg->title, 0, msg->titleLength);
+    memset(msg->msg, 0, msg->msgLength);
+    msg->result = ETH_PLUGIN_RESULT_OK;
 
     switch (msg->screenIndex) {
         case 0:{
