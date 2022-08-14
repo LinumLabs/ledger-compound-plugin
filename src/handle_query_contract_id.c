@@ -8,7 +8,9 @@ void handle_query_contract_id(void *parameters) {
     // msg->version will be the lower sentence displayed on the screen.
 
     // For the first screen, display the plugin name.
-    strlcpy(msg->name, "Type", msg->nameLength);
+    memset(msg->title, 0, msg->titleLength);
+    memset(msg->msg, 0, msg->msgLength);
+    msg->result = ETH_PLUGIN_RESULT_OK;
 
     switch (context->selectorIndex) {
         case COMPOUND_MINT:

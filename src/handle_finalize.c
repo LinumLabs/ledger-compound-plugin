@@ -5,7 +5,7 @@ void handle_finalize(void *parameters) {
     context_t *context = (context_t *) msg->pluginContext;
 
     msg->tokenLookup1 = msg->pluginSharedRO->txContent->destination;
-    msg->numScreens = 2;
+    msg->numScreens = 3;
     msg->uiType = ETH_UI_TYPE_GENERIC;
     msg->result = ETH_PLUGIN_RESULT_OK;
     // Setting number of screens based on function

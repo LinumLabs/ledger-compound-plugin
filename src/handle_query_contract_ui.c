@@ -194,7 +194,7 @@ void handle_query_contract_ui(void *parameters) {
 
     switch (msg->screenIndex) {
         case 0:{
-            strlcpy(msg->title, "Amount", msg->titleLength);
+            strlcpy(msg->title, "Amountsss", msg->titleLength);
             char *ticker_ptr = context->ticker;
             /* skip "c" in front of cToken unless we use "redeem", as
             redeem is the only operation dealing with a cToken amount */
