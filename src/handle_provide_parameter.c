@@ -178,6 +178,8 @@ void handle_provide_parameter(void *parameters) {
         PRINTF("CETH contract expects no parameters\n");
         msg->result = ETH_PLUGIN_RESULT_ERROR;
     }
+    PRINTF(context->selectorIndex);
+
     switch (context->selectorIndex) {
         case COMPOUND_MINT:
             memmove(context->amount, msg->parameter, 32);

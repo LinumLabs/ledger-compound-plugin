@@ -33,21 +33,20 @@ void handle_provide_token(void *parameters) {
 
     if (msg->item1) {
         // Store its ticker.
-        // switch (context->selectorIndex) {
-        //     case COMPOUND_MINT:
-        //     case COMPOUND_REDEEM_UNDERLYING:
-        //     case CETH_MINT:
-        //         msg->result = 
-        //             get_underlying_asset_decimals(context->ticker, &context->decimals)
-        //                 ? ETH_PLUGIN_RESULT_OK
-        //                 : ETH_PLUGIN_RESULT_FALLBACK;
-        //     case COMPOUND_REDEEM:
-        //         context->decimals = msg->item1->token.decimals;
-        //         msg->result = ETH_PLUGIN_RESULT_OK;
-        //         break;
+        switch (context->selectorIndex) {
+            case COMPOUND_MINT:
+            case COMPOUND_REDEEM_UNDERLYING:
+            case CETH_MINT:
+                msg->result = 
+                    get_underlying_asset_decimals(context->ticker, &context->decimals)
+                        ? ETH_PLUGIN_RESULT_OK
+                        : ETH_PLUGIN_RESULT_FALLBACK;
+            case COMPOUND_REDEEM:
+                context->decimals = msg->item1->token.decimals;
+                msg->result = ETH_PLUGIN_RESULT_OK;
+                break;
         
-        // }
-        context->decimals = msg->item1->token.decimals;
+        }
         strlcpy(context->ticker, (char *) msg->item1->token.ticker, sizeof(context->ticker));
         context->token_found = true;
     }
