@@ -213,7 +213,7 @@ void handle_query_contract_ui(void *parameters) {
             strlcpy(msg->title, "Contract", msg->titleLength);
             strlcpy(msg->msg, "Compound ", msg->msgLength);
             strlcat(msg->msg,
-                    context->ticker_1 + 1,
+                    context->ticker + 1,
                     msg->msgLength);  // remove the 'c' char at beginning of compound ticker
             msg->result = ETH_PLUGIN_RESULT_OK;
             break;
