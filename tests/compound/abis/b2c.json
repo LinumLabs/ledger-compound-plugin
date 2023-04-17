@@ -56,7 +56,7 @@
             "selectors": {
                 "0x1249c58b": {
                     "erc20OfInterest": [],
-                    "method": "mint",
+                    "method": "Mint",
                     "plugin": "Compound"
                 },
                 "0x852a12e3": {
