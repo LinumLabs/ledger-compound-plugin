@@ -4,55 +4,48 @@
 #include "eth_plugin_interface.h"
 #include <string.h>
 
+// Number of selectors defined in this plugin. Should match the enum `selector_t`.
+// EDIT THIS: Put in the number of selectors your plugin is going to support.
+#define NUM_SELECTORS 2
+
 // Name of the plugin.
-#define PLUGIN_NAME "Compound"
+// EDIT THIS: Replace with your plugin name.
+#define PLUGIN_NAME "compound"
 
-// TODO: add doc.
-#define NUM_SELECTORS        11
-#define TOKEN_SENT_FOUND     1
-#define TOKEN_RECEIVED_FOUND (1 << 1)
+// Enumeration of the different selectors possible.
+// Should follow the exact same order as the array declared in main.c
+// EDIT THIS: Change the naming (`selector_t`), and add your selector names.
+typedef enum { SUPPLY = 0, APPROVE = 1 } selector_t;
 
+// Enumeration used to parse the smart contract data.
+// EDIT THIS: Adapt the parameter names here.
 typedef enum {
-    COMPOUND_REDEEM_UNDERLYING = 0,
-    COMPOUND_REDEEM,
-    COMPOUND_MINT,
-    COMPOUND_BORROW,
-    COMPOUND_REPAY_BORROW,
-    COMPOUND_REPAY_BORROW_ON_BEHALF,
-    COMPOUND_TRANSFER,
-    COMPOUND_LIQUIDATE_BORROW,
-    COMPOUND_MANUAL_VOTE,
-    COMPOUND_VOTE_DELEGATE
-} compoundSelector_t;
-
-typedef enum {
-    MINT_AMOUNT = 0,
-    REDEEM_TOKENS,
-    REDEEM_AMOUNT,
-    RECIPIENT,
-    BORROW_AMOUNT,
-    BORROWER,
+    ASSET,
+    SPENDER,
     AMOUNT,
-    REPAY_AMOUNT,
-    DELEGATEE,
-    COLLATERAL,
-    PROPOSAL_ID,
-    SUPPORT,
-    UNEXPECTED_PARAMETER
+    UNEXPECTED_PARAMETER,
 } parameter;
+
+// EDIT THIS: Rename `BOILERPLATE` to be the same as the one initialized in `main.c`.
+extern const uint32_t COMPOUND_SELECTORS[NUM_SELECTORS];
+
 typedef struct compoundAssetDefinition_t {
-    char ticker[MAX_TICKER_LEN];
+    uint8_t address[ADDRESS_LENGTH];
+    char assetName[MAX_TICKER_LEN];
     uint8_t decimals;
 } compoundAssetDefinition_t;
 
+#define NUM_COMPOUND_ASSETS 2
+extern compoundAssetDefinition_t const COMPOUND_ASSETS[NUM_COMPOUND_ASSETS];
+
+// Shared global memory with Ethereum app. Must be at most 5 * 32 bytes.
+// EDIT THIS: This struct is used by your plugin to save the parameters you parse. You
+// will need to adapt this struct to your plugin.
 typedef struct context_t {
     // For display.
-    uint8_t dest[ADDRESS_LENGTH];
-    uint8_t collateral[ADDRESS_LENGTH];
+    uint8_t asset[ADDRESS_LENGTH];
+    uint8_t spender[ADDRESS_LENGTH];
     uint8_t amount[INT256_LENGTH];
-    uint8_t proposal_id[INT256_LENGTH];
-    uint8_t support[INT256_LENGTH];
-
     char ticker[MAX_TICKER_LEN];
     uint8_t decimals;
     uint8_t token_found;
@@ -64,10 +57,8 @@ typedef struct context_t {
                          // `offset` is reached.
 
     // For both parsing and display.
-    compoundSelector_t selectorIndex;
+    selector_t selectorIndex;
 } context_t;
-
-extern const uint8_t *const COMPOUND_SELECTORS[NUM_SELECTORS];
 
 // Piece of code that will check that the above structure is not bigger than 5 * 32. Do not remove
 // this check.

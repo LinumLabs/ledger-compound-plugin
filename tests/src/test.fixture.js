@@ -1,29 +1,57 @@
-import Zemu from "@zondax/zemu";
+import Zemu, { DEFAULT_START_OPTIONS, DeviceModel } from "@zondax/zemu";
 import Eth from "@ledgerhq/hw-app-eth";
 import { generate_plugin_config } from "./generate_plugin_config";
 import { parseEther, parseUnits, RLP } from "ethers/lib/utils";
-import { ethers } from "ethers";
-
 
 const transactionUploadDelay = 60000;
 
-const sim_options_generic = {
+async function waitForAppScreen(sim) {
+  await sim.waitUntilScreenIsNot(
+    sim.getMainMenuSnapshot(),
+    transactionUploadDelay
+  );
+}
+
+const sim_options_nano = {
+  ...DEFAULT_START_OPTIONS,
   logging: true,
   X11: true,
   startDelay: 5000,
-  custom: "",
+  startText: "is ready",
 };
 
 const Resolve = require("path").resolve;
 
 const NANOS_ETH_PATH = Resolve("elfs/ethereum_nanos.elf");
+const NANOSP_ETH_PATH = Resolve("elfs/ethereum_nanosp.elf");
 const NANOX_ETH_PATH = Resolve("elfs/ethereum_nanox.elf");
 
-const NANOS_PLUGIN_PATH = Resolve("elfs/compound_nanos.elf");
-const NANOX_PLUGIN_PATH = Resolve("elfs/compound_nanox.elf");
+const NANOS_PLUGIN_PATH = Resolve("elfs/plugin_nanos.elf");
+const NANOSP_PLUGIN_PATH = Resolve("elfs/plugin_nanosp.elf");
+const NANOX_PLUGIN_PATH = Resolve("elfs/plugin_nanox.elf");
 
-const NANOS_PLUGIN = { Paraswap: NANOS_PLUGIN_PATH };
-const NANOX_PLUGIN = { Paraswap: NANOX_PLUGIN_PATH };
+const nano_models: DeviceModel[] = [
+  {
+    name: "nanos",
+    letter: "S",
+    path: NANOS_PLUGIN_PATH,
+    eth_path: NANOS_ETH_PATH,
+  },
+  {
+    name: "nanosp",
+    letter: "SP",
+    path: NANOSP_PLUGIN_PATH,
+    eth_path: NANOSP_ETH_PATH,
+  },
+  {
+    name: "nanox",
+    letter: "X",
+    path: NANOX_PLUGIN_PATH,
+    eth_path: NANOX_ETH_PATH,
+  },
+];
+
+const boilerplateJSON = generate_plugin_config();
 
 const SPECULOS_ADDRESS = "0xFE984369CE3919AA7BB4F431082D027B4F8ED70C";
 const RANDOM_ADDRESS = "0xaaaabbbbccccddddeeeeffffgggghhhhiiiijjjj";
@@ -40,11 +68,7 @@ let genericTx = {
 
 const TIMEOUT = 1000000;
 
-/**
- * Generates a serializedTransaction from a rawHexTransaction copy pasted from etherscan.
- * @param {string} rawTx Raw transaction
- * @returns {string} serializedTx
- */
+// Generates a serializedTransaction from a rawHexTransaction copy pasted from etherscan.
 function txFromEtherscan(rawTx) {
   // Remove 0x prefix
   rawTx = rawTx.slice(2);
@@ -73,43 +97,24 @@ function txFromEtherscan(rawTx) {
   return txType + encoded;
 }
 
-/**
- * Emulation of the device using zemu
- * @param {string} device name of the device to emulate (nanos, nanox)
- * @param {function} func
- * @param {boolean} signed the plugin is already signed 
- * @returns {Promise}
- */
-function zemu(device, func, signed = false, testNetwork="ethereum") {
+function zemu(device, func) {
   return async () => {
     jest.setTimeout(TIMEOUT);
-    let eth_path;
-    let plugin;
-    let sim_options = sim_options_generic;
+    let elf_path;
+    let lib_elf;
+    elf_path = device.eth_path;
+    // Edit this: replace `Boilerplate` by your plugin name
+    lib_elf = { Compound: device.path };
 
-    if (device === "nanos") {
-      eth_path = NANOS_ETH_PATH;
-      plugin = NANOS_PLUGIN;
-      sim_options.model = "nanos";
-    } else {
-      eth_path = NANOX_ETH_PATH;
-      plugin = NANOX_PLUGIN;
-      sim_options.model = "nanox";
-    }
-
-    const sim = new Zemu(eth_path, plugin);
-
+    const sim = new Zemu(elf_path, lib_elf);
     try {
-      await sim.start(sim_options);
+      await sim.start({ ...sim_options_nano, model: device.name });
       const transport = await sim.getTransport();
       const eth = new Eth(transport);
-
-      if(!signed){
-        eth.setLoadConfig({
-          baseURL: null,
-          extraPlugins: generate_plugin_config(),
-        });
-      }
+      eth.setLoadConfig({
+        baseURL: null,
+        extraPlugins: boilerplateJSON,
+      });
       await func(sim, eth);
     } finally {
       await sim.close();
@@ -117,27 +122,12 @@ function zemu(device, func, signed = false, testNetwork="ethereum") {
   };
 }
 
-
-function populateTransaction(contractAddr, inputData, chainId, value="0.1"){
-  // Get the generic transaction template
-  let unsignedTx = genericTx;
-  //adapt to the appropriate network
-  unsignedTx.chainId = chainId;
-  // Modify `to` to make it interact with the contract
-  unsignedTx.to = contractAddr;
-  // Modify the attached data
-  unsignedTx.data = inputData;
-  // Modify the number of ETH sent
-  unsignedTx.value = parseEther(value);
-  // Create serializedTx and remove the "0x" prefix
-  return ethers.utils.serializeTransaction(unsignedTx).slice(2);
-}
-
-
 module.exports = {
-  genericTx,
-  populateTransaction,
   zemu,
+  waitForAppScreen,
+  genericTx,
+  nano_models,
+  SPECULOS_ADDRESS,
+  RANDOM_ADDRESS,
   txFromEtherscan,
-  transactionUploadDelay
 };

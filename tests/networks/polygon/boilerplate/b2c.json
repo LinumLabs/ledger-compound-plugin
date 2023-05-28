@@ -1,0 +1,17 @@
+{
+  "chainId": 1,
+  "contracts": [
+    {
+      "address": "0xF25212E676D1F7F89Cd72fFEe66158f541246445",
+      "contractName": "Compound USDC",
+      "selectors": {
+        "0x7ff36ab5": {
+          "erc20OfInterest": [],
+          "method": "supply",
+          "plugin": "Compound"
+        }
+      }
+    }
+  ],
+  "name": "Compound"
+}

@@ -1,5 +1,15 @@
 #include "compound_plugin.h"
 
+static int find_selector(uint32_t selector, const uint32_t *selectors, size_t n, selector_t *out) {
+    for (selector_t i = 0; i < n; i++) {
+        if (selector == selectors[i]) {
+            *out = i;
+            return 0;
+        }
+    }
+    return -1;
+}
+
 // Called once to init.
 void handle_init_contract(void *parameters) {
     // Cast the msg to the type of structure we expect (here, ethPluginInitContract_t).
@@ -25,58 +35,26 @@ void handle_init_contract(void *parameters) {
     // Initialize the context (to 0).
     memset(context, 0, sizeof(*context));
 
-    // Look for the index of the selectorIndex passed in by `msg`.
-    uint8_t i;
-    for (i = 0; i < NUM_SELECTORS; i++) {
-        if (memcmp((uint8_t *) PIC(COMPOUND_SELECTORS[i]), msg->selector, SELECTOR_SIZE) == 0) {
-            context->selectorIndex = i;
-            break;
-        }
-    }
-
-    // If `i == NUM_SELECTORS` it means we haven't found the selector. Return an error.
-    if (i == NUM_SELECTORS) {
+    uint32_t selector = U4BE(msg->selector, 0);
+    if (find_selector(selector, COMPOUND_SELECTORS, NUM_SELECTORS, &context->selectorIndex)) {
         msg->result = ETH_PLUGIN_RESULT_UNAVAILABLE;
+        return;
     }
 
     // Set `next_param` to be the first field we expect to parse.
-
+    // EDIT THIS: Adapt the `cases`, and set the `next_param` to be the first parameter you expect
+    // to parse.
     switch (context->selectorIndex) {
-        case COMPOUND_MINT:
-            context->next_param = MINT_AMOUNT;
+        case SUPPLY:
+            context->next_param = ASSET;
             break;
-        case COMPOUND_REDEEM:
-            context->next_param = REDEEM_TOKENS;
-            break;
-        case COMPOUND_REDEEM_UNDERLYING:
-            context->next_param = REDEEM_AMOUNT;
-            break;
-        case COMPOUND_BORROW:
-            context->next_param = BORROW_AMOUNT;
-            break;
-        case COMPOUND_REPAY_BORROW:
-            context->next_param = REPAY_AMOUNT;
-            break;
-        case COMPOUND_REPAY_BORROW_ON_BEHALF:
-            context->next_param = BORROWER;
-            break;
-        case COMPOUND_TRANSFER:
-            context->next_param = RECIPIENT;
-            break;
-        case COMPOUND_LIQUIDATE_BORROW:
-            context->next_param = BORROWER;
-            break;
-        case COMPOUND_MANUAL_VOTE:
-            context->next_param = PROPOSAL_ID;
-            break;
-        case COMPOUND_VOTE_DELEGATE:
-            context->next_param = DELEGATEE;
-            break;
+        // Keep this
         default:
             PRINTF("Missing selectorIndex: %d\n", context->selectorIndex);
             msg->result = ETH_PLUGIN_RESULT_ERROR;
             return;
     }
+
     // Return valid status.
     msg->result = ETH_PLUGIN_RESULT_OK;
 }
