@@ -14,13 +14,8 @@ static void set_asset_ui(ethQueryContractUI_t *msg, context_t *context) {
         currentAsset = (compoundAssetDefinition_t *) PIC(&COMPOUND_ASSETS[i]);
         if (memcmp(currentAsset->address, context->asset, ADDRESS_LENGTH) == 0) {
             context->decimals = currentAsset->decimals;
-            memcpy(context->ticker, currentAsset->assetName, MAX_VAULT_TICKER_LEN);
+            memcpy(context->ticker, currentAsset->assetName, MAX_TICKER_LEN);
         }
-    }
-
-    if (context->vault[0] == '\0') {
-        PRINTF("Received an invalid vault\n");
-        msg->result = ETH_PLUGIN_RESULT_ERROR;
     }
 
     // Converts the uint256 number located in `eth_amount` to its string representation and
@@ -39,9 +34,7 @@ static void set_send_asset(ethQueryContractUI_t *msg, const context_t *context) 
     // If the token look up failed, use the default network ticker along with the default decimals.
     if (!context->token_found) {
         decimals = 18;
-        ticker = msg->network_ticker;
     }
-
     amountToString(context->amount,
                    sizeof(context->amount),
                    decimals,
