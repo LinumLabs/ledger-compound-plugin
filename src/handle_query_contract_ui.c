@@ -2,176 +2,24 @@
 
 // Set UI for "Address" screen.
 void set_address_ui(ethQueryContractUI_t *msg, context_t *context) {
-    // Prefix the address with `0x`.
-
     msg->msg[0] = '0';
     msg->msg[1] = 'x';
-
-    // We need a random chainID for legacy reasons with `getEthAddressStringFromBinary`.
-    // Setting it to `0` will make it work with every chainID :)
     uint64_t chainid = 0;
-
-    switch (context->selectorIndex) {
-        case COMPOUND_REPAY_BORROW_ON_BEHALF:
-            getEthAddressStringFromBinary(context->dest,
-                                          (uint8_t *) msg->msg + 2,
-                                          msg->pluginSharedRW->sha3,
-                                          chainid);
-            break;
-        case COMPOUND_TRANSFER:
-            getEthAddressStringFromBinary(context->dest,
-                                          (uint8_t *) msg->msg + 2,
-                                          msg->pluginSharedRW->sha3,
-                                          chainid);
-            break;
-        case COMPOUND_LIQUIDATE_BORROW:
-            getEthAddressStringFromBinary(context->dest,
-                                          (uint8_t *) msg->msg + 2,
-                                          msg->pluginSharedRW->sha3,
-                                          chainid);
-            break;
-        case COMPOUND_VOTE_DELEGATE:
-            getEthAddressStringFromBinary(context->dest,
-                                          (uint8_t *) msg->msg + 2,
-                                          msg->pluginSharedRW->sha3,
-                                          chainid);
-            break;
-    }
+    getEthAddressStringFromBinary(context->dest,
+                                  (uint8_t *) msg->msg + 2,
+                                  msg->pluginSharedRW->sha3,
+                                  chainid);
 }
 
 // Set UI for First param screen
-void set_first_param_ui(ethQueryContractUI_t *msg, context_t *context) {
-    switch (context->selectorIndex) {
-        case COMPOUND_MINT:
-            strlcpy(msg->title, "Mint.", msg->titleLength);
-            amountToString(context->amount,
-                           sizeof(context->amount),
-                           context->decimals,
-                           context->ticker,
-                           msg->msg,
-                           msg->msgLength);
-            break;
-        case COMPOUND_REDEEM:
-            strlcpy(msg->title, "Redeem.", msg->titleLength);
-            amountToString(context->amount,
-                           sizeof(context->amount),
-                           context->decimals,
-                           context->ticker,
-                           msg->msg,
-                           msg->msgLength);
-            break;
-        case COMPOUND_REDEEM_UNDERLYING:
-            strlcpy(msg->title, "Redeem underlying.", msg->titleLength);
-            amountToString(context->amount,
-                           sizeof(context->amount),
-                           context->decimals,
-                           context->ticker,
-                           msg->msg,
-                           msg->msgLength);
-            break;
-        case COMPOUND_BORROW:
-            strlcpy(msg->title, "Borrow amount.", msg->titleLength);
-            amountToString(context->amount,
-                           sizeof(context->amount),
-                           context->decimals,
-                           context->ticker,
-                           msg->msg,
-                           msg->msgLength);
-            break;
-        case COMPOUND_REPAY_BORROW:
-            strlcpy(msg->title, "Repay borrow.", msg->titleLength);
-            amountToString(context->amount,
-                           sizeof(context->amount),
-                           context->decimals,
-                           context->ticker,
-                           msg->msg,
-                           msg->msgLength);
-            break;
-        case COMPOUND_REPAY_BORROW_ON_BEHALF:
-            strlcpy(msg->title, "Borrower.", msg->titleLength);
-            set_address_ui(msg, context);
-            break;
-        case COMPOUND_TRANSFER:
-            strlcpy(msg->title, "Recipient.", msg->titleLength);
-            set_address_ui(msg, context);
-            break;
-        case COMPOUND_LIQUIDATE_BORROW:
-            strlcpy(msg->title, "Liquidate borrower.", msg->titleLength);
-            set_address_ui(msg, context);
-            break;
-        case COMPOUND_MANUAL_VOTE:
-            strlcpy(msg->title, "Proposal id.", msg->titleLength);
-            amountToString(context->proposal_id,
-                           sizeof(context->proposal_id),
-                           context->decimals,
-                           context->ticker,
-                           msg->msg,
-                           msg->msgLength);
-            break;
-        case COMPOUND_VOTE_DELEGATE:
-            strlcpy(msg->title, "Delegatee.", msg->titleLength);
-            set_address_ui(msg, context);
-            break;
-    }
-}
-
-void set_second_param_ui(ethQueryContractUI_t *msg, context_t *context) {
-    switch (context->selectorIndex) {
-        case COMPOUND_REPAY_BORROW_ON_BEHALF:
-            strlcpy(msg->title, "Repaying amount.", msg->titleLength);
-            amountToString(context->amount,
-                           sizeof(context->amount),
-                           context->decimals,
-                           context->ticker,
-                           msg->msg,
-                           msg->msgLength);
-            break;
-        case COMPOUND_TRANSFER:
-            strlcpy(msg->title, "Amount.", msg->titleLength);
-            amountToString(context->amount,
-                           sizeof(context->amount),
-                           context->decimals,
-                           context->ticker,
-                           msg->msg,
-                           msg->msgLength);
-            break;
-        case COMPOUND_LIQUIDATE_BORROW:
-            strlcpy(msg->title, "Amount.", msg->titleLength);
-            amountToString(context->amount,
-                           sizeof(context->amount),
-                           context->decimals,
-                           context->ticker,
-                           msg->msg,
-                           msg->msgLength);
-            break;
-        case COMPOUND_MANUAL_VOTE:
-            strlcpy(msg->title, "Support.", msg->titleLength);
-            amountToString(context->support,
-                           sizeof(context->support),
-                           context->decimals,
-                           context->ticker,
-                           msg->msg,
-                           msg->msgLength);
-            break;
-    }
-}
-
-void set_third_param_ui(ethQueryContractUI_t *msg, context_t *context) {
-    switch (context->selectorIndex) {
-        case COMPOUND_LIQUIDATE_BORROW:
-            strlcpy(msg->title, "Collateral.", msg->titleLength);
-            // Prefix the address with `0x`.
-            msg->msg[0] = '0';
-            msg->msg[1] = 'x';
-            // We need a random chainID for legacy reasons with `getEthAddressStringFromBinary`.
-            // Setting it to `0` will make it work with every chainID :)
-            uint64_t chainid = 0;
-            getEthAddressStringFromBinary(context->collateral,
-                                          (uint8_t *) msg->msg + 2,
-                                          msg->pluginSharedRW->sha3,
-                                          chainid);
-            break;
-    }
+void set_param_ui_amount(ethQueryContractUI_t *msg, context_t *context, char *title) {
+    strlcpy(msg->title, title, msg->titleLength);
+    amountToString(context->amount,
+                   sizeof(context->amount),
+                   context->decimals,
+                   context->ticker,
+                   msg->msg,
+                   100);
 }
 
 void handle_query_contract_ui(void *parameters) {
@@ -179,24 +27,127 @@ void handle_query_contract_ui(void *parameters) {
     context_t *context = (context_t *) msg->pluginContext;
 
     memset(msg->title, 0, msg->titleLength);
-    memset(msg->msg, 0, msg->msgLength);
+    memset(msg->msg, 0, 100);
 
     msg->result = ETH_PLUGIN_RESULT_OK;
 
-    switch (msg->screenIndex) {
-        case 0:
-            set_first_param_ui(msg, context);
+    switch (context->selectorIndex) {
+        case COMPOUND_MINT:
+            switch (msg->screenIndex) {
+                case 0:
+                    set_param_ui_amount(msg, context, "Lend");
+                    break;
+                default:
+                    PRINTF("Selector index: %d not supported\n", context->selectorIndex);
+                    msg->result = ETH_PLUGIN_RESULT_ERROR;
+                    return;
+            }
             break;
-        case 1:
-            set_second_param_ui(msg, context);
+        case COMPOUND_REDEEM:
+            switch (msg->screenIndex) {
+                case 0:
+                    set_param_ui_amount(msg, context, "Redeem");
+                    break;
+                default:
+                    PRINTF("Selector index: %d not supported\n", context->selectorIndex);
+                    msg->result = ETH_PLUGIN_RESULT_ERROR;
+                    return;
+            }
             break;
-        case 2:
-            set_third_param_ui(msg, context);
+        case COMPOUND_REDEEM_UNDERLYING:
+            switch (msg->screenIndex) {
+                case 0:
+                    set_param_ui_amount(msg, context, "Redeem underlying");
+                    break;
+                default:
+                    PRINTF("Selector index: %d not supported\n", context->selectorIndex);
+                    msg->result = ETH_PLUGIN_RESULT_ERROR;
+                    return;
+            }
             break;
-        // Keep this
+        case COMPOUND_BORROW:
+            switch (msg->screenIndex) {
+                case 0:
+                    set_param_ui_amount(msg, context, "Borrow");
+                    break;
+                default:
+                    PRINTF("Selector index: %d not supported\n", context->selectorIndex);
+                    msg->result = ETH_PLUGIN_RESULT_ERROR;
+                    return;
+            }
+            break;
+        case COMPOUND_REPAY_BORROW:
+            switch (msg->screenIndex) {
+                case 0:
+                    set_param_ui_amount(msg, context, "Repay borrow");
+                    break;
+                default:
+                    PRINTF("Selector index: %d not supported\n", context->selectorIndex);
+                    msg->result = ETH_PLUGIN_RESULT_ERROR;
+                    return;
+            }
+            break;
+        case COMPOUND_REPAY_BORROW_ON_BEHALF:
+            switch (msg->screenIndex) {
+                case 0:
+                    strlcpy(msg->title, "Borrower.", msg->titleLength);
+                    set_address_ui(msg, context);
+                    break;
+                case 1:
+                    strlcpy(msg->title, "Repaying amount.", msg->titleLength);
+                    break;
+                default:
+                    PRINTF("Selector index: %d not supported\n", context->selectorIndex);
+                    break;
+            }
+            break;
+        case COMPOUND_TRANSFER:
+            switch (msg->screenIndex) {
+                case 0:
+                    strlcpy(msg->title, "Recipient.", msg->titleLength);
+                    set_address_ui(msg, context);
+                    break;
+                case 1:
+                    strlcpy(msg->title, "Amount.", msg->titleLength);
+                    break;
+                default:
+                    PRINTF("Selector index: %d not supported\n", context->selectorIndex);
+                    break;
+            }
+            break;
+        case COMPOUND_LIQUIDATE_BORROW:
+            switch (msg->screenIndex) {
+                case 0:
+                    strlcpy(msg->title, "Borrower.", msg->titleLength);
+                    set_address_ui(msg, context);
+                    break;
+                case 1:
+                    strlcpy(msg->title, "Amount.", msg->titleLength);
+                    break;
+                case 2:
+                    strlcpy(msg->title, "Collateral.", msg->titleLength);
+                    set_address_ui(msg, context);
+                    break;
+                default:
+                    PRINTF("Selector index: %d not supported\n", context->selectorIndex);
+                    break;
+            }
+            break;
+        case CETH_MINT:
+            switch (msg->screenIndex) {
+                case 0:
+                    set_param_ui_amount(msg, context, "Mint cETH");
+                    break;
+                default:
+                    PRINTF("Selector index: %d not supported\n", context->selectorIndex);
+                    msg->result = ETH_PLUGIN_RESULT_ERROR;
+                    return;
+            }
+            break;
         default:
-            PRINTF("Received an invalid screenIndex\n");
+            PRINTF("Selector index: %d not supported\n", context->selectorIndex);
             msg->result = ETH_PLUGIN_RESULT_ERROR;
             return;
     }
+    msg->result = ETH_PLUGIN_RESULT_OK;
 }

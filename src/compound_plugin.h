@@ -8,21 +8,21 @@
 #define PLUGIN_NAME "Compound"
 
 // TODO: add doc.
-#define NUM_SELECTORS        11
+#define NUM_SELECTORS        9
 #define TOKEN_SENT_FOUND     1
 #define TOKEN_RECEIVED_FOUND (1 << 1)
+#define PARAMETER_LENGTH     32
 
 typedef enum {
-    COMPOUND_REDEEM_UNDERLYING = 0,
+    COMPOUND_MINT = 0,
     COMPOUND_REDEEM,
-    COMPOUND_MINT,
+    COMPOUND_REDEEM_UNDERLYING,
     COMPOUND_BORROW,
     COMPOUND_REPAY_BORROW,
     COMPOUND_REPAY_BORROW_ON_BEHALF,
     COMPOUND_TRANSFER,
     COMPOUND_LIQUIDATE_BORROW,
-    COMPOUND_MANUAL_VOTE,
-    COMPOUND_VOTE_DELEGATE
+    CETH_MINT
 } compoundSelector_t;
 
 typedef enum {
@@ -34,10 +34,9 @@ typedef enum {
     BORROWER,
     AMOUNT,
     REPAY_AMOUNT,
-    DELEGATEE,
     COLLATERAL,
-    PROPOSAL_ID,
     SUPPORT,
+    CETH_AMOUNT,
     UNEXPECTED_PARAMETER
 } parameter;
 typedef struct compoundAssetDefinition_t {
@@ -50,8 +49,8 @@ typedef struct context_t {
     uint8_t dest[ADDRESS_LENGTH];
     uint8_t collateral[ADDRESS_LENGTH];
     uint8_t amount[INT256_LENGTH];
-    uint8_t proposal_id[INT256_LENGTH];
     uint8_t support[INT256_LENGTH];
+    uint8_t contract_address_sent[ADDRESS_LENGTH];
 
     char ticker[MAX_TICKER_LEN];
     uint8_t decimals;

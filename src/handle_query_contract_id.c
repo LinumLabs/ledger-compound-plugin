@@ -11,14 +11,14 @@ void handle_query_contract_id(void *parameters) {
     strlcpy(msg->name, "Compound", msg->nameLength);
 
     switch (context->selectorIndex) {
-        case COMPOUND_REDEEM_UNDERLYING:
-            strlcpy(msg->version, "Redeem underlying", msg->versionLength);
+        case COMPOUND_MINT:
+            strlcpy(msg->version, "Lend", msg->versionLength);
             break;
         case COMPOUND_REDEEM:
             strlcpy(msg->version, "Redeem", msg->versionLength);
             break;
-        case COMPOUND_MINT:
-            strlcpy(msg->version, "Mint", msg->versionLength);
+        case COMPOUND_REDEEM_UNDERLYING:
+            strlcpy(msg->version, "Redeem underlying", msg->versionLength);
             break;
         case COMPOUND_BORROW:
             strlcpy(msg->version, "Borrow", msg->versionLength);
@@ -35,13 +35,9 @@ void handle_query_contract_id(void *parameters) {
         case COMPOUND_LIQUIDATE_BORROW:
             strlcpy(msg->version, "Liquidate borrow", msg->versionLength);
             break;
-        case COMPOUND_MANUAL_VOTE:
-            strlcpy(msg->version, "Manual vote", msg->versionLength);
+        case CETH_MINT:
+            strlcpy(msg->version, "Mint cETH", msg->versionLength);
             break;
-        case COMPOUND_VOTE_DELEGATE:
-            strlcpy(msg->version, "Vote delegate", msg->versionLength);
-            break;
-
         // Keep this
         default:
             PRINTF("Selector index: %d not supported\n", context->selectorIndex);
