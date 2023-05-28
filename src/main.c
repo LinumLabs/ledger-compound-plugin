@@ -26,16 +26,13 @@
 
 // List of selectors supported by this plugin.
 // EDIT THIS: Adapt the variable names and change the `0x` values to match your selectors.
-static const uint32_t SUPPLY= 0xf2b9fdb8;
+static const uint32_t SUPPLY = 0xf2b9fdb8;
 static const uint32_t APPROVE = 0x095ea7b3;
 
 // Array of all the different boilerplate selectors. Make sure this follows the same order as the
-// enum defined in `boilerplate_plugin.h`
+// enum defined in `compound_plugin.h`
 // EDIT THIS: Use the names of the array declared above.
-const uint32_t COMPOUND_SELECTORS[NUM_SELECTORS] = {
-    SUPPLY,
-    APPROVE
-};
+const uint32_t COMPOUND_SELECTORS[NUM_SELECTORS] = {SUPPLY, APPROVE};
 
 const compoundAssetDefinition_t COMPOUND_ASSETS[NUM_COMPOUND_ASSETS] = {
     {{0x0d, 0x50, 0x0B, 0x1d, 0x8E, 0x8e, 0xF3, 0x1E, 0x21, 0xC9,

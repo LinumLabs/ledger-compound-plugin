@@ -13,9 +13,7 @@ static void handle_provide_asset(ethPluginProvideParameter_t *msg, context_t *co
             context->next_param = AMOUNT;
             break;
         case AMOUNT:  // amount
-            copy_parameter(context->amount,
-                msg->parameter,
-                sizeof(context->amount));
+            copy_parameter(context->amount, msg->parameter, sizeof(context->amount));
             context->next_param = UNEXPECTED_PARAMETER;
             break;
         // Keep this

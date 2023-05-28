@@ -15,10 +15,7 @@
 // Enumeration of the different selectors possible.
 // Should follow the exact same order as the array declared in main.c
 // EDIT THIS: Change the naming (`selector_t`), and add your selector names.
-typedef enum {
-   SUPPLY = 0,
-   APPROVE = 1
-} selector_t;
+typedef enum { SUPPLY = 0, APPROVE = 1 } selector_t;
 
 // Enumeration used to parse the smart contract data.
 // EDIT THIS: Adapt the parameter names here.

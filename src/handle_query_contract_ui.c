@@ -50,27 +50,6 @@ static void set_send_asset(ethQueryContractUI_t *msg, const context_t *context) 
                    msg->msgLength);
 }
 
-// Set UI for "Beneficiary" screen.
-// EDIT THIS: Adapt / remove this function to your needs.
-static void set_beneficiary_ui(ethQueryContractUI_t *msg, context_t *context) {
-    strlcpy(msg->title, "Asset", msg->titleLength);
-
-    // Prefix the address with `0x`.
-    msg->msg[0] = '0';
-    msg->msg[1] = 'x';
-
-    // We need a random chainID for legacy reasons with `getEthAddressStringFromBinary`.
-    // Setting it to `0` will make it work with every chainID :)
-    uint64_t chainid = 0;
-
-    // Get the string representation of the address stored in `context->beneficiary`. Put it in
-    // `msg->msg`.
-    getEthAddressStringFromBinary(
-        context->beneficiary,
-        msg->msg + 2,  // +2 here because we've already prefixed with '0x'.
-        msg->pluginSharedRW->sha3,
-        chainid);
-}
 
 void handle_query_contract_ui(void *parameters) {
     ethQueryContractUI_t *msg = (ethQueryContractUI_t *) parameters;
@@ -87,8 +66,7 @@ void handle_query_contract_ui(void *parameters) {
 
     // EDIT THIS: Adapt the cases for the screens you'd like to display.
     // switch(context->selectorIndex){
-    //     case SUPPLY:
-        
+    //     case SUPPLY:  
     // }
     switch (msg->screenIndex) {
         case 0:
