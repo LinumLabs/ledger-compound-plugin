@@ -50,7 +50,6 @@ static void set_send_asset(ethQueryContractUI_t *msg, const context_t *context) 
                    msg->msgLength);
 }
 
-
 void handle_query_contract_ui(void *parameters) {
     ethQueryContractUI_t *msg = (ethQueryContractUI_t *) parameters;
     context_t *context = (context_t *) msg->pluginContext;
@@ -64,10 +63,6 @@ void handle_query_contract_ui(void *parameters) {
 
     msg->result = ETH_PLUGIN_RESULT_OK;
 
-    // EDIT THIS: Adapt the cases for the screens you'd like to display.
-    // switch(context->selectorIndex){
-    //     case SUPPLY:  
-    // }
     switch (msg->screenIndex) {
         case 0:
             set_asset_ui(msg, context);

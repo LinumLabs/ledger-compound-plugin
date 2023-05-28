@@ -9,8 +9,6 @@ void handle_finalize(void *parameters) {
     // EDIT THIS: Set the total number of screen you will need.
     msg->numScreens = 2;
     // amount + asset
-
-
     // EDIT THIS: set `tokenLookup1` (and maybe `tokenLookup2`) to point to
     // token addresses you will info for (such as decimals, ticker...).
     msg->tokenLookup1 = context->asset;
