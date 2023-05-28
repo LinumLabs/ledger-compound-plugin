@@ -43,7 +43,7 @@ const compoundAssetDefinition_t COMPOUND_ASSETS[NUM_COMPOUND_ASSETS] = {
       0xA3, 0x0C, 0x99, 0xA7, 0xa9, 0x44, 0x9A, 0xa8, 0x41, 0x74},
      "USDC",
      6},
-}
+};
 
 // Function to dispatch calls from the ethereum app.
 void dispatch_plugin_calls(int message, void *parameters) {
@@ -57,7 +57,7 @@ void dispatch_plugin_calls(int message, void *parameters) {
         case ETH_PLUGIN_FINALIZE:
             handle_finalize(parameters);
             break;
-        case ETH_PLUGIN_PROVIDE_INFO:
+        case ETH_PLUGIN_PROVIDE_TOKEN:
             handle_provide_token(parameters);
             break;
         case ETH_PLUGIN_QUERY_CONTRACT_ID:
