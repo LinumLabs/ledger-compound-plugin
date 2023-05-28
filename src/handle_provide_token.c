@@ -7,12 +7,12 @@ void handle_provide_token(void *parameters) {
     ethPluginProvideToken_t *msg = (ethPluginProvideToken_t *) parameters;
     context_t *context = (context_t *) msg->pluginContext;
 
-    if (msg->item1) {
+    if (msg->token1) {
         // The Ethereum App found the information for the requested token!
         // Store its decimals.
-        context->decimals = msg->item1->token.decimals;
+        context->decimals = msg->token1->token.decimals;
         // Store its ticker.
-        strlcpy(context->ticker, (char *) msg->item1->token.ticker, sizeof(context->ticker));
+        strlcpy(context->ticker, (char *) msg->token1->token.ticker, sizeof(context->ticker));
 
         // Keep track that we found the token.
         context->token_found = true;
