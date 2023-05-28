@@ -12,12 +12,12 @@ const testDirSuffix = "mint"; // <= directory to compare device snapshots to
 const signedPlugin = false;
 const contractName = "Compound DAI";
 const chainID = 1;
-
+const serializedTx = populateTransaction(contractAddr, rawTxHex, chainID);
 const devices = [
   {
     name: "nanos",
     label: "nano S",
-    steps: 9
+    steps: 7
   }
 ];
-devices.forEach((device) => processTest(device, contractName, testLabel, testLabel, rawTxHex, signedPlugin, "", testNetwork));
+devices.forEach((device) => processTest(device, contractName, testLabel, testLabel, rawTxHex, signedPlugin, serializedTx, testNetwork));
